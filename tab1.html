@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madras University - Students</title>
+    <style>
+        /* Add your CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #4d4d51;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(27, 46, 167, 0.1);
+            display: flex;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .menu {
+            width: 20%;
+            height: 100%;
+            background-color: #1d23c7;
+            color: #fff;
+            padding: 20px;
+        }
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        .menu ul li {
+            margin-bottom: 10px;
+            position: relative;
+        }
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+        .menu ul li a:hover {
+            background-color: #555;
+        }
+        .content {
+            width: 80%;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        .form-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: auto;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .form-row {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-row input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-row button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #3498db;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .form-row button:hover {
+            background-color: #2980b9;
+        }
+        .add-field-btn {
+            display: inline-block;
+            margin: 20px 0;
+            background-color: #1ad0f0;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #fff;
+        }
+        .add-field-btn:hover {
+            background-color: #f7a61c;
+        }
+        @media screen and (min-width: 768px) {
+            .menu {
+                width: 20%;
+                height: calc(100vh - 100px);
+                overflow-y: auto;
+            }
+            .content {
+                width: 80%;
+            }
+        }
+        .hidden-fields {
+            display: none;
+        }
+        /* Add professional button styles */
+        .form-container input[type="button"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #0b0b0b;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button.view-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button.edit-btn {
+            background-color: #FF9800;
+            color: white;
+        }
+        button.delete-btn {
+            background-color: #F44336;
+            color: white;
+        }
+        button:hover {
+            opacity: 0.8;
+        }
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            /* padding-top: 100px; */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 250%;
+            overflow: auto;
+            background-color: rgb(0,0,0);
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto 10%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        /* Form layout adjustment */
+        .form-set {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        .form-set input {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        /* Modal table adjustment */
+        #modalDetailsTable th, #modalDetailsTable td {
+            padding: 15px; /* Adjust padding for better spacing */
+            text-align: center; /* Center align all content */
+            border-bottom: 1px solid #ddd;
+        }
+        #modalDetailsTable th {
+            background-color: #444;
+            color: #fff;
+        }
+        #modalTotals td {
+            text-align: center; /* Center align totals */
+        }
+        #studentInfo {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        #studentInfo span {
+            display: block;
+        }
+        .search-bar {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .search-bar input {
+            width: 60%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        .search-bar input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .undo-btn {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            cursor: pointer;
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <ul>
+                <li><a href="tab1.html">Madras University</a></li>
+                <li><a href="tab2.html">Madras University Affiliated</a></li>
+                <li><a href="tab3.html">Other University Autonomous</a></li>
+                <li><a href="tab4.html">Other University Affiliated</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <div class="header">
+                <h1>MADRAS UNIVERSITY - STUDENTS DETAIL</h1>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search by name or degree" oninput="searchStudents()">
+            </div>
+            <div class="form-container">
+                <h2>Student Marks Form</h2>
+                <form id="studentForm1">
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="stuid">Student ID:</label>
+                            <input type="text" id="stuid" name="stuid">
+                        </div>
+                        <div class="form-row">
+                            <label for="stuname">Student Name:</label>
+                            <input type="text" id="stuname" name="stuname" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="degree">Degree:</label>
+                            <input type="text" id="degree" name="degree" required>
+                        </div>
+                        <div class="form-row">
+                            <label for="Entrance">Entrance:</label>
+                            <input type="number" id="Entrance" name="Entrance" required>
+                        </div>
+                    </div>
+                    <div id="formContainer"></div>
+                    <button type="button" class="add-field-btn" onclick="addFieldSet()">Add Set of Fields</button>
+                    <button type="button" onclick="closeFields()">Close Fields</button>
+                    <button type="submit">Submit</button>
+                    <input type="button" value="Cancel" onclick="cancelForm()">
+                </form>
+            </div>
+            <table id="studentsTable">
+                <thead>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Student Name</th>
+                        <th>Degree</th>
+                        <th>Entrance</th>
+                        <th>Actions</th>
+                        <th>Save Info</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button id="undoButton" class="undo-btn" onclick="undoDelete()">Undo</button>
+    <!-- Modal Structure -->
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="studentInfo">
+                <span><strong>Student ID:</strong> <span id="modalStudentID"></span></span>
+                <span><strong>Student Name:</strong> <span id="modalStudentName"></span></span>
+                <span><strong>Degree:</strong> <span id="modalStudentDegree"></span></span>
+                <span><strong>Entrance:</strong> <span id="modalEntrancemark"></span></span>
+            </div>
+            <h2>Student Details</h2>
+            <table id="modalDetailsTable">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Semester</th>
+                        <th>Credits</th>
+                        <th>Max Marks</th>
+                        <th>Marks Obtained</th>
+                        <th>GRDP</th>
+                        <th>Credit x GPA</th>
+                        <th>Percentage</th>
+                        <th>Total</th>
+                        <th>Round</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr id="modalTotals">
+                        <td colspan="6"><strong>Totals:</strong></td>
+                        <td id="totalCreditGPA"></td>
+                        <td id="totalPercentage"></td>
+                        <td id="totalMarksObtained"></td>
+                        <td id="totalRound"></td>
+                    </tr>
+                    <tr id="modalHalfMarks">
+                        <td colspan="7"><strong>50% of Marks Obtained:</strong></td>
+                        <td id="halfMarksObtained"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                    <tr id="modalEntrance">
+                        <td colspan="7"><strong>Final Entrance Mark:</strong></td>
+                        <td id="Entrancemark"></td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>            
+        </div>
+    </div>
+
+    <script>
+    let editIndex = -1; // Global variable to keep track of the student being edited
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadStudents();
+
+        document.getElementById('studentForm1').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addOrEditStudent();
+        });
+
+        document.querySelector('.close').addEventListener('click', function() {
+            document.getElementById('detailsModal').style.display = 'none';
+        });
+    });
+
+    function addFieldSet() {
+        const container = document.getElementById('formContainer');
+        const fieldSet = document.createElement('div');
+        fieldSet.className = 'form-set';
+        fieldSet.innerHTML = `
+            <div class="form-row">
+                <label>Subject:</label>
+                <input type="text" name="subject" required>
+            </div>
+            <div class="form-row">
+                <label>Semester:</label>
+                <input type="roman-numbers" name="semester" pattern="[IVLMC]" maxlength="4" required>
+            </div>
+            <div class="form-row">
+                <label>Credits:</label>
+                <input type="number" name="credits" oninput="calculateCreditGPA(this)" required>
+            </div>
+            <div class="form-row">
+                <label>Max Marks:</label>
+                <input type="number" name="maxMarks" value="100" required>
+            </div>
+            <div class="form-row">
+                <label>Marks Obtained:</label>
+                <input type="number" name="marksObtained" step="any" oninput="calculatePercentage(this)" required>
+            </div>
+            <div class="form-row">
+                <label>GRDP:</label>
+                <input type="number" name="grdp" step="any" oninput="calculateCreditGPA(this)" required>
+            </div>
+            <div class="form-row">
+                <label>Credit x GPA:</label>
+                <input type="number" name="creditGPA" step="any" readonly required>
+            </div>
+            <div class="form-row">
+                <label>Percentage:</label>
+                <input type="number" name="percentage" step="any" readonly required>
+                <span class="percent-symbol">%</span>
+            </div>
+            <div class="form-row">
+                <label>Total:</label>
+                <input type="number" name="total" step="any" readonly required>
+            </div>
+            <div class="form-row">
+                <label>Round:</label>
+                <input type="number" name="round" step="1" required>
+            </div>
+        `;
+        container.appendChild(fieldSet);
+    }
+
+    try {
+        localStorage.setItem('storage_test', new Array(500 * 1024).join('x'));
+        localStorage.removeItem('storage_test');
+        console.log('localStorage increased successfully to 500 KB.');
+    } catch (e) {
+        console.log('Failed to increase localStorage to 500 KB:', e);
+    }
+
+
+    function viewStudent(id) {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        const student = students.find(student => student.id == id || student.id == "");
+
+        if (student) {
+            document.getElementById('modalStudentID').textContent = student.id;
+            document.getElementById('modalStudentName').textContent = student.name;
+            document.getElementById('modalStudentDegree').textContent = student.degree;
+            document.getElementById('modalEntrancemark').textContent = student.Entrance;
+
+            const tbody = document.querySelector("#modalDetailsTable tbody");
+            tbody.innerHTML = "";
+            let totalmaxmark = 0;
+            let totalPercentage = 0;
+            let totalMarksObtained = 0;
+            let totalCreditGPA = 0;
+            let totalRound = 0;
+
+            student.additionalData.forEach(data => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${data.subject}</td>
+                    <td>${data.semester}</td>
+                    <td>${data.credits}</td>
+                    <td>${data.maxMarks}</td>
+                    <td>${data.marksObtained}</td>
+                    <td>${data.grdp}</td>
+                    <td>${data.creditGPA}</td>
+                    <td>${data.percentage}</td>
+                    <td>${data.total}</td>
+                    <td>${data.round}</td>
+                `;
+                totalmaxmark += parseInt(data.maxMarks);
+                totalPercentage += parseFloat(data.percentage);
+                totalMarksObtained += parseFloat(data.marksObtained);
+                totalCreditGPA += parseFloat(data.creditGPA);
+                totalRound += parseInt(data.round);
+            });
+
+            // Display totals and calculated values
+            document.getElementById('totalCreditGPA').textContent = totalCreditGPA.toFixed(2);
+            document.getElementById('totalPercentage').textContent = ((totalPercentage/totalmaxmark)*100).toFixed(2)+'%';
+            document.getElementById('totalMarksObtained').textContent = totalMarksObtained.toFixed(2);
+            document.getElementById('totalRound').textContent = totalRound;
+            document.getElementById('halfMarksObtained').textContent = (((totalPercentage/totalmaxmark)*100)* 0.5).toFixed(2)+'%';;
+            document.getElementById('Entrancemark').textContent = (parseFloat(student.Entrance) + parseFloat(((totalPercentage/totalmaxmark)*100)* 0.5)).toFixed(2) ;
+
+            document.getElementById('detailsModal').style.display = 'block';
+        }
+    }
+
+    function loadStudents() {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        const tbody = document.querySelector("#studentsTable tbody");
+        tbody.innerHTML = "";
+        students.forEach(student => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${student.id}</td>
+                <td>${student.name}</td>
+                <td>${student.degree}</td>
+                <td>${student.Entrance}</td>
+                <td>
+                    <button class="view-btn" onclick="viewStudent(${student.id})">View</button>
+                    <button class="edit-btn" onclick="editStudent(${student.id})">Edit</button>
+                    <button class="delete-btn" onclick="deleteStudent(${student.id})">Delete</button>
+                </td>
+                <td>
+                    <button class="save-xml-btn" onclick="saveStudentAsXML(${student.id})">Save Student as XML</button>
+                </td>
+            `;
+        });
+    }
+
+    function addOrEditStudent() {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        const form = document.forms['studentForm1'];
+        const id = form['stuid'].value;
+        const name = form['stuname'].value;
+        const degree = form['degree'].value;
+        const Entrance = form['Entrance'].value;
+        const additionalData = Array.from(document.querySelectorAll('#formContainer .form-set')).map(fieldSet => ({
+            subject: fieldSet.querySelector('[name="subject"]').value,
+            semester: fieldSet.querySelector('[name="semester"]').value,
+            credits: fieldSet.querySelector('[name="credits"]').value,
+            maxMarks: fieldSet.querySelector('[name="maxMarks"]').value,
+            marksObtained: fieldSet.querySelector('[name="marksObtained"]').value,
+            grdp: fieldSet.querySelector('[name="grdp"]').value,
+            creditGPA: fieldSet.querySelector('[name="creditGPA"]').value,
+            percentage: fieldSet.querySelector('[name="percentage"]').value,
+            total: fieldSet.querySelector('[name="total"]').value,
+            round: fieldSet.querySelector('[name="round"]').value,
+        }));
+
+        if (isDuplicateId(id, editIndex)) {
+            alert('Student ID must be unique. This ID already exists.');
+            return;
+        }
+
+        if (editIndex === -1) {
+            students.push({ id, name, degree,Entrance, additionalData });
+        } else {
+            students[editIndex] = { id, name, degree,Entrance, additionalData };
+            editIndex = -1;
+        }
+
+        localStorage.setItem('students_tab1', JSON.stringify(students));
+        form.reset();
+        document.getElementById('formContainer').innerHTML = '';
+        loadStudents();
+    }
+
+    function isDuplicateId(id, currentIndex) {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        // Check if any student has the same ID and is not in the current index being edited
+        return students.some((student, index) => index !== currentIndex && student.id === id);
+    }
+
+    function editStudent(id) {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        editIndex = students.findIndex(student => student.id == id || student.name == student.name);
+        const student = students[editIndex];
+
+        const form = document.forms['studentForm1'];
+        form['stuid'].value = student.id;
+        form['stuname'].value = student.name;
+        form['degree'].value = student.degree;
+        form['Entrance'].value = student.Entrance;
+
+        document.getElementById('formContainer').innerHTML = '';
+        student.additionalData.forEach(data => {
+            addFieldSet();
+            const fieldSets = document.querySelectorAll('#formContainer .form-set');
+            const fieldSet = fieldSets[fieldSets.length - 1];
+
+            fieldSet.querySelector('[name="subject"]').value = data.subject;
+            fieldSet.querySelector('[name="semester"]').value = data.semester;
+            fieldSet.querySelector('[name="credits"]').value = data.credits;
+            fieldSet.querySelector('[name="maxMarks"]').value = data.maxMarks;
+            fieldSet.querySelector('[name="marksObtained"]').value = data.marksObtained;
+            fieldSet.querySelector('[name="grdp"]').value = data.grdp;
+            fieldSet.querySelector('[name="creditGPA"]').value = data.creditGPA;
+            fieldSet.querySelector('[name="percentage"]').value = data.percentage;
+            fieldSet.querySelector('[name="total"]').value = data.total;
+            fieldSet.querySelector('[name="round"]').value = data.round;
+        });
+    }
+
+    function deleteStudent(studentId) {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        const studentIndex = students.findIndex(student => student.id == studentId);
+        if (studentIndex !== -1) {
+            lastDeletedStudent = students[studentIndex];
+            students.splice(studentIndex, 1);
+            localStorage.setItem('students_tab1', JSON.stringify(students));
+            loadStudents();
+            showUndoButton();
+        }
+    }
+
+    function searchStudents() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        const filteredStudents = students.filter(student => 
+            student.name.toLowerCase().includes(input) || student.degree.toLowerCase().includes(input)
+        );
+
+        const tbody = document.querySelector("#studentsTable tbody");
+        tbody.innerHTML = "";
+        filteredStudents.forEach(student => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td>${student.id}</td>
+                <td>${student.name}</td>
+                <td>${student.degree}</td>
+                <td>${student.Entrance}</td>
+                <td>
+                    <button class="view-btn" onclick="viewStudent(${student.id})">View</button>
+                    <button class="edit-btn" onclick="editStudent(${student.id})">Edit</button>
+                    <button class="delete-btn" onclick="deleteStudent(${student.id})">Delete</button>
+                </td>
+                <td>
+                    <button class="save-xml-btn" onclick="saveStudentAsXML(${student.id})">Save Student as XML</button>
+                </td>
+            `;
+        });
+    }
+
+    function cancelForm() {
+        if (confirm("Are you sure you want to cancel? Any unsaved changes will be lost.")) {
+            document.getElementById("studentForm1").reset(); // Reset the form
+            // Optionally redirect to another page
+            // window.location.href = "http://example.com";
+        }
+    }
+
+    function calculateCreditGPA(input) {
+        const fieldSet = input.closest('.form-set');
+        const credits = fieldSet.querySelector('input[name="credits"]').value;
+        const grdp = fieldSet.querySelector('input[name="grdp"]').value;
+
+        if (credits && grdp) {
+            const creditGPA = credits * grdp;
+            fieldSet.querySelector('input[name="creditGPA"]').value = creditGPA;
+        }
+    }
+
+    function calculatePercentage(input) {
+        const fieldSet = input.closest('.form-set');
+        const maxMarks = fieldSet.querySelector('input[name="maxMarks"]').value;
+        const marksObtained = fieldSet.querySelector('input[name="marksObtained"]').value;
+
+        if (maxMarks && marksObtained) {
+            const percentage = (marksObtained / maxMarks) * 100;
+            fieldSet.querySelector('input[name="percentage"]').value = percentage;
+
+            const total = marksObtained;
+            fieldSet.querySelector('input[name="total"]').value = total;
+
+            const round = Math.round(marksObtained);  // Convert to nearest integer
+            fieldSet.querySelector('input[name="round"]').value = round;
+
+        }
+    }
+
+    function downloadXML(data, filename) {
+        const blob = new Blob([data], { type: 'application/xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }, 0);
+    }
+
+
+    function convertStudentToXML(student) {
+        const xmlDoc = document.implementation.createDocument('', '', null);
+        const studentElement = xmlDoc.createElement('student');
+
+        const id = xmlDoc.createElement('id');
+        id.textContent = student.id;
+        studentElement.appendChild(id);
+
+        const name = xmlDoc.createElement('name');
+        name.textContent = student.name;
+        studentElement.appendChild(name);
+
+        const degree = xmlDoc.createElement('degree');
+        degree.textContent = student.degree;
+        studentElement.appendChild(degree);
+
+        const entrance = xmlDoc.createElement('Entrance');
+        entrance.textContent = student.Entrance;
+        studentElement.appendChild(entrance);
+
+        const additionalDataElement = xmlDoc.createElement('additionalData');
+        student.additionalData.forEach(data => {
+            const dataElement = xmlDoc.createElement('data');
+
+            const subject = xmlDoc.createElement('subject');
+            subject.textContent = data.subject;
+            dataElement.appendChild(subject);
+
+            const semester = xmlDoc.createElement('semester');
+            semester.textContent = data.semester;
+            dataElement.appendChild(semester);
+
+            const credits = xmlDoc.createElement('credits');
+            credits.textContent = data.credits;
+            dataElement.appendChild(credits);
+
+            const maxMarks = xmlDoc.createElement('maxMarks');
+            maxMarks.textContent = data.maxMarks;
+            dataElement.appendChild(maxMarks);
+
+            const marksObtained = xmlDoc.createElement('marksObtained');
+            marksObtained.textContent = data.marksObtained;
+            dataElement.appendChild(marksObtained);
+
+            const grdp = xmlDoc.createElement('grdp');
+            grdp.textContent = data.grdp;
+            dataElement.appendChild(grdp);
+
+            const creditGPA = xmlDoc.createElement('creditGPA');
+            creditGPA.textContent = data.creditGPA;
+            dataElement.appendChild(creditGPA);
+
+            const percentage = xmlDoc.createElement('percentage');
+            percentage.textContent = data.percentage;
+            dataElement.appendChild(percentage);
+
+            const total = xmlDoc.createElement('total');
+            total.textContent = data.total;
+            dataElement.appendChild(total);
+
+            const round = xmlDoc.createElement('round');
+            round.textContent = data.round;
+            dataElement.appendChild(round);
+
+            additionalDataElement.appendChild(dataElement);
+        });
+        studentElement.appendChild(additionalDataElement);
+
+        xmlDoc.appendChild(studentElement);
+        return new XMLSerializer().serializeToString(xmlDoc);
+    }
+
+
+
+    function saveStudent() {
+        const form = document.forms['studentForm'];
+        const student = {
+            id: form['stuid'].value,
+            name: form['stuname'].value,
+            degree: form['degree'].value,
+            Entrance: form['Entrance'].value,
+            additionalData: Array.from(document.querySelectorAll('#additionalFields .form-set')).map(fieldSet => ({
+                subject: fieldSet.querySelector('[name="subject"]').value,
+                semester: fieldSet.querySelector('[name="semester"]').value,
+                credits: fieldSet.querySelector('[name="credits"]').value,
+                maxMarks: fieldSet.querySelector('[name="maxMarks"]').value,
+                marksObtained: fieldSet.querySelector('[name="marksObtained"]').value,
+                grdp: fieldSet.querySelector('[name="grdp"]').value,
+                creditGPA: fieldSet.querySelector('[name="creditGPA"]').value,
+                percentage: fieldSet.querySelector('[name="percentage"]').value,
+                total: fieldSet.querySelector('[name="total"]').value,
+                round: fieldSet.querySelector('[name="round"]').value,
+            }))
+        };
+
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        students.push(student);
+        localStorage.setItem('students_tab1', JSON.stringify(students));
+
+        form.reset();
+        document.getElementById('additionalFields').innerHTML = '';
+        loadStudents();
+    }
+    
+    function getStudentById(id) {
+        const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+        return students.find(student => student.id == id);
+    }
+
+    function saveStudentAsXML(studentId) {
+        const student = getStudentById(studentId);
+        if (!student) {
+            console.error(`Student with ID ${studentId} not found.`);
+            return;
+        }
+        const xmlData = convertStudentToXML(student);
+        const filename = `student_${studentId}.xml`;
+        downloadXML(xmlData, filename);
+    }
+
+    function removeFieldSet(button) {
+        const fieldSet = button.parentElement;
+        fieldSet.remove();
+    }
+
+    function closeFields() {
+        const container = document.getElementById('formContainer');
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+    }
+
+    function showUndoButton() {
+        const undoButton = document.getElementById('undoButton');
+        undoButton.style.display = 'block';
+        setTimeout(() => {
+            undoButton.style.display = 'none';
+        }, 500000); // Hide after 5 seconds
+    }
+
+    function undoDelete() {
+        if (lastDeletedStudent) {
+            const students = JSON.parse(localStorage.getItem('students_tab1')) || [];
+            students.push(lastDeletedStudent);
+            localStorage.setItem('students_tab1', JSON.stringify(students));
+            loadStudents();
+            lastDeletedStudent = null;
+            document.getElementById('undoButton').style.display = 'none';
+        }
+    }
+
+    </script>
+</body>
+</html>

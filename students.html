@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Institute - Students</title>
+    <style>
+        /* Reset CSS */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #4d4d51;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(27, 46, 167, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .menu {
+            float: left;
+            width: 100%;
+            background-color: #1d23c7;
+            color: #fff;
+            padding: 20px;
+        }
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+        .menu ul li {
+            margin-bottom: 10px;
+            position: relative; /* Needed for positioning submenus */
+        }
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            display: block;
+            padding: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+        .menu ul li a:hover {
+            background-color: #555;
+        }
+        .menu ul ul {
+            display: none; /* Hide submenus by default */
+            position: absolute;
+            top: 100%; /* Position submenus below parent items */
+            left: 0;
+            background-color: #555; /* Changed background color */
+            width: 200%; /* Increased width */
+            padding: 10px 0; /* Added padding */
+            border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+        }
+        .menu ul ul li {
+            margin-bottom: 0; /* Reset margin */
+        }
+        .menu ul li:hover ul {
+            display: block; /* Show submenu on hover */
+        }
+        .content {
+            float: left;
+            width: 100%;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        @media screen and (min-width: 768px) {
+            .menu {
+                width: 20%;
+                height: calc(100vh - 100px);
+                overflow-y: auto;
+            }
+            .content {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>MADRAS UNIVERSITY</h1>
+        </div>
+        <div class="menu">
+            <ul>
+                <li><a href="tab1.html">Madras University</a></li>
+                <li><a href="tab2.html">Madras University Affiliated</a></li>
+                <li><a href="tab3.html">other University Autonomous</a></li>
+                <li><a href="tab4.html">Other University Affiliated</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
